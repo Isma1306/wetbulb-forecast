@@ -22,3 +22,10 @@ func AddWetbulb(forecast api.OpenMeteoResponse) api.OpenMeteoResponse {
 	forecast.Hourly.WetBulb2M = wetBulb2m
 	return forecast
 }
+
+func FormatDates(dates *[]string) {
+	for i := 0; i < len(*dates); i++ {
+		(*dates)[i] = (*dates)[i] + "Z"
+	}
+
+}

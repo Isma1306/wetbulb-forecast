@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"wetBulb/api"
 
@@ -9,6 +10,7 @@ import (
 
 func GetLocation(c *gin.Context) {
 	location := c.Query("q")
+	log.Println(location)
 	if location == "" {
 		c.JSON(http.StatusBadRequest, "no location requested")
 		return

@@ -11,16 +11,14 @@ func main() {
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
 	r.LoadHTMLGlob("./templates/*.html")
-	// r.Static("/assets", "./assets")
-	// r.StaticFile("/favicon.ico", "./resources/favicon.ico")
+	r.GET("/", func(c *gin.Context) {
+		c.Request.URL.Path = "/home"
+		r.HandleContext(c)
+	})
 	api := r.Group("/api")
-	api.GET("/wetBulb", controllers.GetWetBulbCurrent)
 	api.GET("/forecast", controllers.GetForecast)
 	api.GET("/location", controllers.GetLocation)
 	r.StaticFS("/home", http.Dir("./assets"))
-	// r.GET("/", func(c *gin.Context) {
-	// 	c.HTML(http.StatusOK, "index.html", nil)
-	// })
 	r.Run()
 
 }

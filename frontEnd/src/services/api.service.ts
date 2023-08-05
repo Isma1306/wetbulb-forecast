@@ -41,10 +41,10 @@ export interface HourlyUnits {
   relativehumidity_2m: string;
 }
 export interface Hourly {
-  time?: (string)[] | null;
-  temperature_2m?: (number)[] | null;
-  relativehumidity_2m?: (number)[] | null;
-  WetBulb2M?: (number)[] | null;
+  time: string[] | number[];
+  temperature_2m: (number)[];
+  relativehumidity_2m: (number)[];
+  WetBulb2M: (number)[];
 }
 
 
@@ -59,25 +59,18 @@ export async function searchLocations(query: string) {
 }
 
 
-export async function getCurrentWeather(location: LocationResult) {
-  const { latitude, longitude } = location;
-  const response = await fetch(
-    `http://localhost:8080/api/wetBulb/?lat=${encodeURI(String(latitude))}&lon=${encodeURI(String(longitude))}`
-  );
-  const parsedResults = await response.json();
-
-
-  return parsedResults.toFixed(2) as number;
-}
-
 export async function getForecast(location: LocationResult) {
   const { latitude, longitude } = location;
   const response = await fetch(
     `http://localhost:8080/api/forecast/?lat=${encodeURI(String(latitude))}&lon=${encodeURI(String(longitude))}`
   );
-  const results = await response.json();
+  const results = await response.json() as Forecast;
 
+  results.hourly.time = results.hourly.time?.map(time => {
+    const date = new Date(time);
+    const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+    return `${date.getHours()}:${minutes}`;
+  });
 
-
-  return results.hourly as Hourly;
+  return results.hourly;
 }
