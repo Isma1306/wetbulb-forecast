@@ -28,6 +28,7 @@ const App: Component = () => {
     if (forecast()) {
       new Chart(document.getElementById('chart') as any, {
         type: 'line',
+
         options: {
           animation: false,
           responsive: true,
@@ -39,40 +40,69 @@ const App: Component = () => {
               enabled: true,
             },
           },
+          scales: {
+            temp: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: {
+                display: true,
+                text: 'temp - °C',
+              },
+            },
+            hum: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: {
+                display: true,
+                text: 'Relative Humidity - R%',
+              },
+
+              // grid line settings
+              grid: {
+                drawOnChartArea: false, // only want the grid lines for one axis to show up
+              },
+            },
+          },
         },
         data: {
           labels: forecast()?.time as string[],
           datasets: [
             {
               label: 'H',
-              borderColor: 'green',
-              backgroundColor: 'green',
+              borderColor: '#277da1',
+              backgroundColor: '#277da1',
               data: forecast()?.relativehumidity_2m as number[],
+              yAxisID: 'hum',
             },
             {
               label: 'T',
-              borderColor: '#277da1',
-              backgroundColor: '#277da1',
+              borderColor: 'green',
+              backgroundColor: 'green',
               data: forecast()?.temperature_2m as number[],
+              yAxisID: 'temp',
             },
             {
               label: 'Tw',
               borderColor: '#90be6d',
               backgroundColor: '#90be6d',
-
               data: forecast()?.WetBulb2M as number[],
+              yAxisID: 'temp',
             },
             {
               label: 'Dangerous Tw',
               borderColor: '#f3722c',
               backgroundColor: '#f3722c',
               data: forecast()?.WetBulb2M?.map(() => 28),
+              yAxisID: 'temp',
             },
             {
               label: 'Mortal Tw',
               borderColor: '#f94144',
               backgroundColor: '#f94144',
               data: forecast()?.WetBulb2M?.map(() => 35),
+              yAxisID: 'temp',
             },
           ],
         },
