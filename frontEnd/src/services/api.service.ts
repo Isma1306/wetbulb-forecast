@@ -41,7 +41,8 @@ export interface HourlyUnits {
   relativehumidity_2m: string;
 }
 export interface Hourly {
-  time: string[] | number[];
+  time: string[];
+  date: Date[];
   temperature_2m: (number)[];
   relativehumidity_2m: (number)[];
   WetBulb2M: (number)[];
@@ -52,7 +53,7 @@ export interface Hourly {
 export async function searchLocations(query: string) {
   if (query.trim() === "") return [];
   const response = await fetch(
-    `http://localhost:8080/api/location?q=${encodeURI(query)}`
+    `http://localhost:8080/api/location?q=${encodeURI(query.trim())}`
   );
   const parsedResponse = await response.json();
   return parsedResponse.results as LocationResult[];
@@ -66,10 +67,11 @@ export async function getForecast(location: LocationResult) {
   );
   const results = await response.json() as Forecast;
 
-  results.hourly.time = results.hourly.time?.map(time => {
+  results.hourly.date = results.hourly.time?.map(time => {
     const date = new Date(time);
-    const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
-    return `${date.getHours()}:${minutes}`;
+    // const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+    return date;
+    // return `${date.getDay()}/${date.getMonth()} - ${date.getHours()}:${minutes}`;
   });
 
   return results.hourly;

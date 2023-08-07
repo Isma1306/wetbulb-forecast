@@ -4,7 +4,7 @@ import { LocationResult } from '../services/api.service'
 
 type DropdownProps = {
   locations: LocationResult[] | undefined
-  setLocation: Setter<LocationResult>
+  setLocation: Setter<LocationResult | undefined>
   setShow: Setter<boolean>
 }
 
