@@ -1,7 +1,6 @@
-import { Setter, createSignal, Show, For } from 'solid-js'
-import { SearchInputProps } from './search-input.component'
+import { For, Setter } from 'solid-js'
 import { LocationResult } from '../services/api.service'
-
+import styles from '../App.module.css'
 type DropdownProps = {
   locations: LocationResult[] | undefined
   setLocation: Setter<LocationResult | undefined>
@@ -10,7 +9,7 @@ type DropdownProps = {
 
 export function Dropdown({ setShow, setLocation, locations }: DropdownProps) {
   return (
-    <ul>
+    <ul class={styles.Dropdown}>
       <For each={locations}>
         {(location) => (
           <li

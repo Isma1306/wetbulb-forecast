@@ -1,0 +1,33 @@
+.App {
+  background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.Chart {
+  width: 80%;
+  min-width: 300px;
+}
+
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.Dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
