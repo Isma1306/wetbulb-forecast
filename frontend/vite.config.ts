@@ -23,7 +23,9 @@ export default defineConfig({
 
 
   },
+  base: "/home",
   build: {
+    outDir: '../public/',
     target: 'esnext',
   },
 
