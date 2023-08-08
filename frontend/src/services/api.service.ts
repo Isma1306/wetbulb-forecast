@@ -53,7 +53,7 @@ export interface Hourly {
 export async function searchLocations(query: string) {
   if (query.trim() === "") return [];
   const response = await fetch(
-    `http://localhost:8080/api/location?q=${encodeURI(query.trim())}`
+    `/api/location?q=${encodeURI(query.trim())}`
   );
   const parsedResponse = await response.json();
   return parsedResponse.results as LocationResult[];
@@ -63,7 +63,7 @@ export async function searchLocations(query: string) {
 export async function getForecast(location: LocationResult) {
   const { latitude, longitude } = location;
   const response = await fetch(
-    `http://localhost:8080/api/forecast/?lat=${encodeURI(String(latitude))}&lon=${encodeURI(String(longitude))}`
+    `/api/forecast/?lat=${encodeURI(String(latitude))}&lon=${encodeURI(String(longitude))}`
   );
   const results = await response.json() as Forecast;
 
