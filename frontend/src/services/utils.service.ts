@@ -1,5 +1,6 @@
-import { ChartConfiguration } from 'chart.js';
+import { ChartConfiguration, ScriptableLineSegmentContext } from 'chart.js';
 import { Hourly } from './api.service';
+import { AnyObject } from 'chart.js/dist/types/basic';
 
 
 export const calcCurrentTw = function (data: Hourly) {
@@ -18,6 +19,11 @@ export const calcCurrentTw = function (data: Hourly) {
   return (y2 + value).toFixed(2);
 };
 
+const greyOldDates = function (ctx: ScriptableLineSegmentContext, value: AnyObject) {
+  if (ctx.p1.parsed.x < Date.now()) return 'grey';
+
+
+};
 
 export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"line"> {
   return {
@@ -25,6 +31,7 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
     options: {
       animation: false,
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         annotation: {
           annotations: {
@@ -64,8 +71,9 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           type: 'time',
           time: {
             displayFormats: {
-              hour: 'DD HH:MM',
+              hour: 'ddd HH:mm',
             },
+            minUnit: "hour"
           },
         },
         temp: {
@@ -76,6 +84,7 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
             display: true,
             text: 'temp - °C',
           },
+
         },
         hum: {
           type: 'linear',
@@ -102,6 +111,10 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           backgroundColor: 'rgba(63, 181, 228, 0.75)',
           data: forecast.relativehumidity_2m,
           yAxisID: 'hum',
+          tension: 0.4,
+          segment: {
+            borderColor: greyOldDates
+          }
         },
         {
           label: 'Tempeature',
@@ -109,6 +122,10 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           backgroundColor: 'rgba(228, 112, 63, 0.75)',
           data: forecast.temperature_2m,
           yAxisID: 'temp',
+          tension: 0.4,
+          segment: {
+            borderColor: greyOldDates
+          }
         },
         {
           label: 'Wet Bulb Temperature',
@@ -116,6 +133,10 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           backgroundColor: 'rgba(228, 63, 63, 0.75)',
           data: forecast.WetBulb2M,
           yAxisID: 'temp',
+          tension: 0.4,
+          segment: {
+            borderColor: greyOldDates
+          }
         },
       ],
     },

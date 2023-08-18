@@ -72,9 +72,7 @@ export async function getForecast(location: LocationResult) {
 
   results.hourly.date = results.hourly.time?.map(time => {
     const date = new Date(time);
-    // const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
     return date;
-    // return `${date.getDay()}/${date.getMonth()} - ${date.getHours()}:${minutes}`;
   });
 
   return results.hourly;

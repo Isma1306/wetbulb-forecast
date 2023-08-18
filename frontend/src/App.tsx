@@ -1,7 +1,7 @@
 import { Show, createEffect, createResource, createSignal, type Component } from 'solid-js'
 import { SearchInput } from './components/search-input.component'
 
-import { CategoryScale, Chart, Legend, LineController, LineElement, LinearScale, PointElement, TimeScale } from 'chart.js'
+import { CategoryScale, Chart, Legend, LineController, LineElement, LinearScale, PointElement, TimeScale, Tooltip } from 'chart.js'
 import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import styles from './App.module.css'
@@ -38,7 +38,8 @@ const App: Component = () => {
       Chart.register(PointElement)
       Chart.register(LineElement)
       Chart.register(Legend)
-      new Chart(document.getElementById('chart') as any, setChartOptions(result))
+      Chart.register(Tooltip)
+      new Chart(document.getElementById('chart') as HTMLCanvasElement, setChartOptions(result))
     }
   })
 
