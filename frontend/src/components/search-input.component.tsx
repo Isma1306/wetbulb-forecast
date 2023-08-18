@@ -1,5 +1,6 @@
 import { Setter, createSignal } from 'solid-js'
 import styles from '../App.module.css'
+import searchLogo from '../assets/search-icon.svg'
 export interface SearchInputProps {
   setQuery: Setter<string>
 }
@@ -24,7 +25,7 @@ export function SearchInput(props: SearchInputProps) {
         />
 
         <button type='submit' onClick={clickHandler}>
-          Search
+          <img src={searchLogo} alt='search' />
         </button>
       </form>
     </>

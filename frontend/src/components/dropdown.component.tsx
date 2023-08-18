@@ -1,4 +1,4 @@
-import { For, Setter } from 'solid-js'
+import { For, Setter, Show } from 'solid-js'
 import { LocationResult } from '../services/api.service'
 import styles from '../App.module.css'
 type DropdownProps = {
@@ -18,7 +18,14 @@ export function Dropdown({ setShow, setLocation, locations }: DropdownProps) {
               setShow(false)
             }}
           >
-            {location.name} - {location.country}
+            <p>
+              {location.name} - {location.country}
+            </p>
+            <small>
+              <Show when={location.admin1}>{location.admin1}</Show>
+              <Show when={location.admin2}> - {location.admin2}</Show>
+              <Show when={location.admin3}> - {location.admin3}</Show>
+            </small>
           </li>
         )}
       </For>
