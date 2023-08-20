@@ -112,6 +112,7 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           data: forecast.relativehumidity_2m,
           yAxisID: 'hum',
           tension: 0.4,
+          pointStyle: false,
           segment: {
             borderColor: greyOldDates
           }
@@ -123,6 +124,7 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           data: forecast.temperature_2m,
           yAxisID: 'temp',
           tension: 0.4,
+          pointStyle: false,
           segment: {
             borderColor: greyOldDates
           }
@@ -134,6 +136,7 @@ export const setChartOptions = function (forecast: Hourly): ChartConfiguration<"
           data: forecast.WetBulb2M,
           yAxisID: 'temp',
           tension: 0.4,
+          pointStyle: false,
           segment: {
             borderColor: greyOldDates
           }

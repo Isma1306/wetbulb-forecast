@@ -4,20 +4,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
 }
+.Content {
+  min-height: calc(100vh - 45px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 30px;
+}
 
+footer {
+  height: 15px;
+
+  font-size: 0.7em;
+}
 .Chart {
   width: 90%;
+  max-width: 800px;
   min-width: 300px;
+  min-height: 300px;
 }
 
 canvas {
   width: 100% !important;
   height: 100% !important;
-  min-height: 300px;
 }
 
 .Dropdown {
@@ -38,7 +50,7 @@ li {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  font-size: 0.5em;
+  font-size: 1em;
   align-items: flex-start;
   padding: 4px;
   border: solid white 1px;
@@ -55,7 +67,6 @@ li:hover {
 }
 .Input {
   width: 300px;
-
   display: flex;
   flex-direction: row;
   align-items: center;
