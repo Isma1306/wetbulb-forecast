@@ -19,6 +19,7 @@ export function SearchInput(props: SearchInputProps) {
         <input
           id='title'
           value={input()}
+          placeholder='e.g. Rome'
           onInput={(e) => {
             setInput(e.currentTarget.value)
           }}

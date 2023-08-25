@@ -1,3 +1,8 @@
+:root {
+  --width: 300px;
+  box-sizing: border-box;
+}
+
 .App {
   background-color: #282c34;
   min-height: 100vh;
@@ -23,8 +28,8 @@ footer {
 .Chart {
   width: 90%;
   max-width: 800px;
-  min-width: 300px;
-  min-height: 300px;
+  min-width: var(--width);
+  min-height: var(--width);
 }
 
 canvas {
@@ -32,18 +37,26 @@ canvas {
   height: 100% !important;
 }
 
+.DropdownContainer {
+  width: var(--width);
+}
+
 .Dropdown {
-  width: 300px;
-  max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
-
+  max-height: var(--width);
+  width: var(--width);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  list-style-type: none;
   margin: 0;
   padding: 0;
+  box-shadow: 5px 5px 5px rgba(5, 5, 5, 0.452);
+}
+ul {
+  list-style-type: none;
+  position: absolute;
+  background-color: rgb(59, 59, 65);
 }
 
 li {
@@ -56,7 +69,7 @@ li {
   border: solid white 1px;
   border-left: solid white 2px;
   border-right: solid white 2px;
-  width: calc(100% - 12px);
+  width: 100%;
 }
 
 li p {
@@ -66,7 +79,7 @@ li:hover {
   background-color: #3c4046;
 }
 .Input {
-  width: 300px;
+  width: var(--width);
   display: flex;
   flex-direction: row;
   align-items: center;
