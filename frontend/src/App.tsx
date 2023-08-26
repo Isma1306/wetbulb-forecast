@@ -63,11 +63,13 @@ const App: Component = () => {
         </Show>
       </div>
       <footer>
-        Thanks to <a href='https://open-meteo.com/'>Open-Meteo</a> for the data!
-        <span>
-          {' '}
-          - Make with love by <a href='https://github.com/Isma1306'>Isma</a>
-        </span>
+        <p>
+          Thanks to <a href='https://open-meteo.com/'>Open-Meteo</a> for the data!
+          <span>
+            {' '}
+            - Make with love by <a href='https://github.com/Isma1306'>Isma</a>
+          </span>
+        </p>
       </footer>
     </div>
   )
