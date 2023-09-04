@@ -51,12 +51,13 @@ export interface Hourly {
   WetBulb2M: (number)[];
 }
 
-
+const url = 'https://wetbulb.onrender.com';
+// const url = 'http://localhost:8080';
 
 export async function searchLocations(query: string) {
   if (query.trim() === "") return [];
   const response = await fetch(
-    `https://wetbulb.onrender.com/api/location?q=${encodeURI(query.trim())}`
+    `${url}/api/location?q=${encodeURI(query.trim())}`
   );
   const parsedResponse = await response.json();
   return parsedResponse.results as LocationResult[];
@@ -66,7 +67,7 @@ export async function searchLocations(query: string) {
 export async function getForecast(location: LocationResult) {
   const { latitude, longitude } = location;
   const response = await fetch(
-    `https://wetbulb.onrender.com/api/forecast?lat=${encodeURI(String(latitude))}&lon=${encodeURI(String(longitude))}`
+    `${url}/api/forecast?lat=${encodeURI(String(latitude))}&lon=${encodeURI(String(longitude))}`
   );
   const results = await response.json() as Forecast;
 

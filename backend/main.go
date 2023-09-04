@@ -13,6 +13,7 @@ func main() {
 	r.SetTrustedProxies(nil)
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"https://wetbulb-8f6k.onrender.com"}
+	// config.AllowOrigins = []string{"*"}
 	config.AllowMethods = []string{"GET"}
 	config.AllowHeaders = []string{"*"}
 	// r.Use(cors.New(config))

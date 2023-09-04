@@ -61,13 +61,21 @@ const App: Component = () => {
             <canvas id='chart'></canvas>
           </div>
         </Show>
+
+        <h4>
+          What is the wet-bulb temperature? <a href='https://en.wikipedia.org/wiki/Wet-bulb_temperature'>Check it here!</a>
+        </h4>
       </div>
       <footer>
         <p>
           Thanks to <a href='https://open-meteo.com/'>Open-Meteo</a> for the data!
           <span>
             {' '}
-            - Make with love by <a href='https://github.com/Isma1306'>Isma</a>
+            - the wet-bulb is calculated following <a href='https://journals.ametsoc.org/view/journals/apme/50/11/jamc-d-11-0143.1.xml'>this equation</a>
+          </span>
+          <span>
+            {' '}
+            - Make with love by <a href='https://github.com/Isma1306/wetbulb-forecast'>Isma</a>
           </span>
         </p>
       </footer>
