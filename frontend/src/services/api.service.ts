@@ -51,8 +51,7 @@ export interface Hourly {
   WetBulb2M: (number)[];
 }
 
-const url = 'https://wetbulb.onrender.com';
-// const url = 'http://localhost:8080';
+const url = import.meta.env.DEV ? 'http://localhost:8080' : 'https://wetbulb.onrender.com';
 
 export async function searchLocations(query: string) {
   if (query.trim() === "") return [];
