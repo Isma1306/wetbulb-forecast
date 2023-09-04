@@ -16,16 +16,11 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
-    cors: {
-      origin: `http://localhost:3000`,
-      optionsSuccessStatus: 200 // For legacy browser support
-    },
-
 
   },
   base: "/home",
   build: {
-    outDir: '../public/',
+    outDir: './build/',
     target: 'esnext',
   },
 
