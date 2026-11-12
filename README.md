@@ -21,6 +21,9 @@ More about Tw: https://en.wikipedia.org/wiki/Wet-bulb_temperature
 Browser (SolidJS + Chart.js)
    │  /api/location?q=Madrid          /api/forecast?lat=..&lon=..
    ▼
+nginx (serves the static frontend, proxies /api/ to the backend)
+   │
+   ▼
 Go backend (Gin)  ──►  Open-Meteo geocoding API
                   ──►  Open-Meteo forecast API (hourly temp + relative humidity, 2 days)
                   ──►  calculates Tw for every hour and returns it with the forecast
@@ -52,8 +55,10 @@ Implementation: [`CalcWetBulb`](backend/utils/wetBulb.go). Paper: https://journa
 - **Why Stull's formula instead of the full psychrometric calculation.** The exact method needs air pressure and an iterative solver. Stull's equation needs only temperature and humidity, which Open-Meteo already gives, and it's a single expression. The tradeoff: it's an approximation, accurate to about ±1 °C at sea-level pressure and for normal ranges (RH 5–99 %, T −20 to 50 °C). That's fine for a heat-risk warning, but not for lab-grade work.
 - **Why the calculation lives in the backend.** The Go backend ([`utils/wetBulb.go`](backend/utils/wetBulb.go)) owns the physics, so the frontend only renders. The formula is in one place and the API returns ready-to-use data that any other client could reuse.
 - **Why a backend at all, instead of calling Open-Meteo from the browser.** The backend is a thin proxy that hides the third-party API's shape, enriches the data, allows only `GET` requests from the frontend's origin through CORS ([`main.go`](backend/main.go)) and gzips the responses.
-- **Separate frontend and backend deployments.** At first the Go server also served the built frontend. I chose to split them: the frontend is a static Vite build, and the backend is configured with the `FEURL` environment variable. Each can be deployed and scaled on its own. The cost is a CORS setup and one more thing to deploy.
-- **Self-hosted instead of a cloud host.** CI on GitHub Actions builds and tests every push. The app runs as a Docker container on my home server, managed with Portainer, and is exposed through a Cloudflare Tunnel, so there are no open ports on my network. I chose this over a cloud host to keep costs at zero and to learn the ops side end to end. The tradeoff: uptime depends on my home server and connection, and I'm the one patching and monitoring it.
+- **Separate frontend and backend containers.** At first the Go server also served the built frontend. I chose to split them into two containers in [`docker-compose.yml`](docker-compose.yml). The frontend is a static Vite build served by nginx ([`nginx.conf`](frontend/nginx.conf)), which also proxies `/api/` to the backend. The backend is only exposed on the internal Docker network, not to the host. Because the browser calls the API on the same origin, the frontend needs no API URL in production ([`api.service.ts`](frontend/src/services/api.service.ts)). nginx also handles gzip and long-term caching for the hashed build assets.
+- **Small, unprivileged images.** Both [Dockerfiles](backend/Dockerfile) use multi-stage builds. The backend is a static Go binary (`CGO_ENABLED=0`, stripped) on Alpine, running as a non-root user, with only the CA certificates it needs for HTTPS calls to Open-Meteo.
+- **Configuration through environment variables.** [`.env.example`](.env.example) sets the public URL (used as the CORS origin) and the frontend port. The backend refuses to start without `FEURL`, so a misconfigured deployment fails right away instead of failing quietly with CORS errors.
+- **Self-hosted instead of a cloud host.** The app runs in Docker on my home server, managed with Portainer, and is exposed through a Cloudflare Tunnel, so there are no open ports on my network. I chose this over a cloud host to keep costs at zero and to learn the ops side end to end. The tradeoff: uptime depends on my home server and connection, and I'm the one patching and monitoring it.
 - **Chart.js instead of ECharts.** I started with ECharts and replaced it with Chart.js plus `chartjs-plugin-annotation`. It's lighter, and the annotation plugin made the danger bands and the "now" line easy to draw.
 - **SolidJS for the UI.** Fine-grained reactivity and a tiny bundle for a single-screen app, without a virtual DOM.
 - **Timezones.** Open-Meteo returns hourly times in GMT with no offset. The backend [adds the `Z` suffix](backend/utils/wetBulb.go) so the browser reads them as UTC and shows them in the user's local time.
@@ -63,9 +68,18 @@ Implementation: [`CalcWetBulb`](backend/utils/wetBulb.go). Paper: https://journa
 - **Backend:** Go 1.20, Gin, gin-contrib/cors, gin-contrib/gzip
 - **Frontend:** SolidJS, TypeScript, Vite, Chart.js, chartjs-plugin-annotation, Day.js
 - **Data:** Open-Meteo forecast and geocoding APIs (no API key needed)
-- **Ops:** GitHub Actions, Docker, Portainer, Cloudflare Tunnel, on a self-hosted home server
+- **Ops:** Docker, Docker Compose, nginx, Portainer, Cloudflare Tunnel, on a self-hosted home server
 
-## Running it locally
+## Running it with Docker
+
+```bash
+cp .env.example .env     # set PUBLIC_URL to the URL you'll open the app at
+docker compose up -d --build
+```
+
+Open http://localhost:3100 (or the `FRONTEND_PORT` you set). For local use, set `PUBLIC_URL=http://localhost:3100`.
+
+## Running it for development
 
 You need Go 1.20+, Node 18+ and pnpm (or npm).
 
@@ -99,7 +113,8 @@ Open http://localhost:3000.
 
 ## Next steps
 
-- Unit tests for `CalcWetBulb` against Stull's published reference values, plus a GitHub Actions workflow to run them.
+- Unit tests for `CalcWetBulb` against Stull's published reference values.
+- A GitHub Actions workflow that builds the Docker images on every push.
 - Better error handling for upstream failures from Open-Meteo.
 - A configurable forecast length, and alerts when Tw crosses the danger thresholds.
 
