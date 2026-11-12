@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      FEURL: ${PUBLIC_URL:-http://localhost:3100}
+      GIN_MODE: release
+    expose:
+      - '8080'
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - '${FRONTEND_PORT:-3100}:3100'
+    depends_on:
+      - backend

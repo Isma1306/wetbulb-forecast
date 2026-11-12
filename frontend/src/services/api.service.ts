@@ -51,7 +51,9 @@ export interface Hourly {
   WetBulb2M: (number)[];
 }
 
-const url = import.meta.env.DEV ? 'http://localhost:8080' : 'https://wetbulb.onrender.com';
+// In production the app is served by nginx, which proxies /api to the backend
+// on the same origin, so requests stay relative.
+const url = import.meta.env.DEV ? 'http://localhost:8080' : '';
 
 export async function searchLocations(query: string) {
   if (query.trim() === "") return [];
